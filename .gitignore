@@ -11,3 +11,7 @@ mlruns/
 .env
 
 *.log
+
+.ipynb_checkpoints/
+mlflow.db
+mlruns/

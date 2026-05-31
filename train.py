@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score
 
 
@@ -29,10 +29,14 @@ preprocessor = ColumnTransformer(
     ]
 )
 
-model = RandomForestClassifier(
-    n_estimators=200,
+model = XGBClassifier(
+    n_estimators=300,
+    max_depth=4,
+    learning_rate=0.05,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    eval_metric="logloss",
     random_state=42,
-    class_weight="balanced"
 )
 
 pipeline = Pipeline(
@@ -54,17 +58,17 @@ with mlflow.start_run():
     pipeline.fit(X_train, y_train)
 
     proba = pipeline.predict_proba(X_test)[:, 1]
-    pred = (proba >= 0.5).astype(int)
+    pred = (proba >= 0.35).astype(int)
 
     roc_auc = roc_auc_score(y_test, proba)
     precision = precision_score(y_test, pred)
     recall = recall_score(y_test, pred)
     f1 = f1_score(y_test, pred)
 
-    mlflow.log_param("model_type", "RandomForestClassifier")
+    mlflow.log_param("model_type", "XGBoost")
     mlflow.log_param("n_estimators", 200)
     mlflow.log_param("class_weight", "balanced")
-    mlflow.log_param("threshold", 0.5)
+    mlflow.log_param("threshold", 0.35)
 
     mlflow.log_metric("roc_auc", roc_auc)
     mlflow.log_metric("precision", precision)
