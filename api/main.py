@@ -25,7 +25,7 @@ def predict(data: dict):
     df = pd.DataFrame([data])
 
     probability = float(model.predict_proba(df)[0][1])
-    prediction = prediction = int(probability >= 0.35)
+    prediction = int(probability >= 0.35)
 
     return {
         "prediction": prediction,
