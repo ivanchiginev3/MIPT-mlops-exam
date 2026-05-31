@@ -181,6 +181,4 @@ https://bbavst4d7ls42rfp4cjl.containers.yandexcloud.net/health
 
 Ivan Chiginev
 
-Bauman Moscow State Technical University
-
 MIPT Data Science Master's Program
