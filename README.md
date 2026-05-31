@@ -164,11 +164,18 @@ deploy_model
 * `docs/sli_slo.md`
 * `docs/adr_latency_decision.md`
 
-## Deployment
+## Deployed Service
 
-Планируемая платформа развертывания:
+Yandex Cloud Serverless Container:
 
-**Yandex Cloud Serverless Containers**
+```text
+https://bbavst4d7ls42rfp4cjl.containers.yandexcloud.net/
+```
+Health check:
+
+```text
+https://bbavst4d7ls42rfp4cjl.containers.yandexcloud.net/health
+```
 
 ## Author
 
