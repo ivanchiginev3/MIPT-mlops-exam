@@ -50,7 +50,7 @@
 
 В системе реализован упрощенный жизненный цикл модели:
 
-
+```text
 Training
    ↓
 Candidate model
@@ -62,7 +62,7 @@ Promotion
 Production model
    ↓
 Archive previous production model
-
+```
 
 После запуска train.py новая модель сохраняется как candidate:
 `models/candidate/churn_model.pkl`
