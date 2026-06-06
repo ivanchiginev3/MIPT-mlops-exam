@@ -62,9 +62,11 @@ Promotion
 Production model
    ↓
 Archive previous production model
+
 ```text
 После запуска train.py новая модель сохраняется как candidate:
 `models/candidate/churn_model.pkl`
+```text
 
 После проверки качества запускается:
 `python promote_model.py`
