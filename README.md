@@ -91,7 +91,7 @@ Compare with Production Model
 Promote or Reject
 ↓
 Archive Previous Production Model
-```text
+```
 
 Новая модель переводится в Production только в том случае, если она удовлетворяет требованиям по качеству и показывает результаты не хуже текущей рабочей модели.
 
