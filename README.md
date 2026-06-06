@@ -27,7 +27,26 @@
 
 ## Model
 
-Финальная модель:
+### Выбор модели
+
+В процессе обучения система рассматривает несколько моделей-кандидатов:
+
+* Random Forest
+* XGBoost
+
+Для каждой модели рассчитываются метрики качества:
+
+* ROC-AUC
+* Precision
+* Recall
+* F1-score
+
+После обучения модели сравниваются между собой по F1-score.
+
+Модель, показавшая наилучший результат, сохраняется как Candidate-модель и используется на следующем этапе жизненного цикла.
+
+
+### Финальная модель:
 
 **XGBoost Classifier**
 
@@ -51,31 +70,30 @@
 В системе реализован упрощенный жизненный цикл модели:
 
 ```text
-Training
-   ↓
-Candidate model
-   ↓
-Quality evaluation
-   ↓
-Promotion
-   ↓
-Production model
-   ↓
-Archive previous production model
-```
+Data
+↓
+Train Random Forest
+↓
+Train XGBoost
+↓
+Compare models
+↓
+Best model becomes Candidate
 
-После запуска train.py новая модель сохраняется как candidate:
-`models/candidate/churn_model.pkl`
+Promotion workflow:
 
-После проверки качества запускается:
-`python promote_model.py`
+Candidate Model
+↓
+SLO Validation
+↓
+Compare with Production Model
+↓
+Promote or Reject
+↓
+Archive Previous Production Model
+```text
 
-Скрипт выполняет promotion модели:
-- текущая production-модель архивируется в models/archive/;
-- candidate-модель копируется в models/production/;
-- FastAPI использует только production-модель.
-
-Если candidate-модель не соответствует SLO, promotion не выполняется, и production-сервис продолжает использовать предыдущую стабильную модель.
+Новая модель переводится в Production только в том случае, если она удовлетворяет требованиям по качеству и показывает результаты не хуже текущей рабочей модели.
 
 ## Project Structure
 
