@@ -13,7 +13,8 @@
 * контейнеризацию через Docker;
 * оркестрацию через Airflow;
 * CI/CD через GitHub Actions;
-* мониторинг качества модели с использованием SLI/SLO.
+* мониторинг качества модели с использованием SLI/SLO;
+* жизненный цикл модели через candidate, production и archive версии.
 
 ## Business Problem
 
@@ -45,6 +46,36 @@
 | Recall    | 0.6118 |
 | F1-score  | 0.6288 |
 
+## Model Lifecycle
+
+В системе реализован упрощенный жизненный цикл модели:
+
+```text
+Training
+   ↓
+Candidate model
+   ↓
+Quality evaluation
+   ↓
+Promotion
+   ↓
+Production model
+   ↓
+Archive previous production model
+```text
+После запуска train.py новая модель сохраняется как candidate:
+`models/candidate/churn_model.pkl`
+
+После проверки качества запускается:
+`python promote_model.py`
+
+Скрипт выполняет promotion модели:
+- текущая production-модель архивируется в models/archive/;
+- candidate-модель копируется в models/production/;
+- FastAPI использует только production-модель.
+
+Если candidate-модель не соответствует SLO, promotion не выполняется, и production-сервис продолжает использовать предыдущую стабильную модель.
+
 ## Project Structure
 
 ```text
@@ -58,9 +89,13 @@
 │   ├── sli_slo.md
 │   └── adr_latency_decision.md
 ├── models/
+│   ├── candidate/
+│   ├── production/
+│   └── archive/
 ├── notebooks/
 │   └── mdd_analysis.ipynb
 ├── train.py
+├── promote_model.py
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
@@ -110,6 +145,7 @@ pip install -r requirements.txt
 
 ```bash
 python train.py
+python promote_model.py
 ```
 
 Запуск API:
