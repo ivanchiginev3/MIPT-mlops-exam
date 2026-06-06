@@ -80,10 +80,10 @@ with mlflow.start_run():
         artifact_path="model"
     )
 
-    joblib.dump(pipeline, "models/churn_model.pkl")
+    joblib.dump(pipeline, "models/candidate/churn_model.pkl")
 
     print(f"ROC-AUC: {roc_auc:.4f}")
     print(f"Precision: {precision:.4f}")
     print(f"Recall: {recall:.4f}")
     print(f"F1-score: {f1:.4f}")
-    print("Model saved to models/churn_model.pkl")
+    print("Candidate model saved to models/candidate/churn_model.pkl")

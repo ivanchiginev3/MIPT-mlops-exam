@@ -9,7 +9,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-model = joblib.load("models/churn_model.pkl")
+model = joblib.load("models/production/churn_model.pkl")
 
 
 @app.get("/health")
