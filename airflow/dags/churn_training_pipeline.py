@@ -6,7 +6,7 @@ from airflow.operators.bash import BashOperator
 
 with DAG(
     dag_id="churn_training_pipeline",
-    description="Training pipeline for customer churn prediction model",
+    description="Customer churn MLOps pipeline",
     start_date=datetime(2026, 1, 1),
     schedule="@daily",
     catchup=False,
@@ -23,14 +23,14 @@ with DAG(
         bash_command="cd /app && python train.py",
     )
 
-    validate_model = BashOperator(
-        task_id="validate_model",
-        bash_command="test -f /app/models/churn_model.pkl",
+    validate_candidate = BashOperator(
+        task_id="validate_candidate",
+        bash_command="test -f /app/models/candidate/churn_model.pkl",
     )
 
-    deploy_model = BashOperator(
-        task_id="deploy_model",
-        bash_command="echo 'Model passed validation and is ready for deployment'",
+    promote_model = BashOperator(
+        task_id="promote_model",
+        bash_command="cd /app && python promote_model.py",
     )
 
-    validate_data >> train_model >> validate_model >> deploy_model
+    validate_data >> train_model >> validate_candidate >> promote_model
